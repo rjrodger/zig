@@ -1,0 +1,17 @@
+{
+  "name": "zig",
+  "version": "0.0.1",
+  "description": "zig",
+  "main": "zig.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha test/*.test.js"
+  },
+  "author": "Richard Rodger (http://richardrodger.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^1.21.5"
+  },
+  "dependencies": {
+    "underscore": "^1.7.0"
+  }
+}
