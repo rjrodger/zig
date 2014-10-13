@@ -30,68 +30,73 @@ npm install zig
 
 ## Quick Example
 
-Here's the classic Mongo example. Look ma, no callbacks! Nice and
+Some callbacks:
+
+```js
+function color(val,callback) {
+  callback(null,{color:val})
+}
+
+function sound(val,callback) {
+  callback(null,{sound:val})
+}
+```
+
+
+Look ma, no callbacks! Nice and
 linear down the page.
 
 ```js
-var zig = require('..') 
+var zig = require('..')
 
-var MongoClient = require('mongodb').MongoClient
-var format = require('util').format;
-
-var db,collection
-
-zig({trace:false})
+zig()
+  .start()
   .wait(function(data,done){
-    MongoClient.connect('mongodb://127.0.0.1:27017/test', done)
+    color('red',done)
   })
   .step(function(data){
-    db = data
-    return collection = db.collection('test_insert')
+    console.log('color:'+data.color)
+    return {sound:true};
   })
+  .if( 'data.sound' )
   .wait(function(data,done){
-    collection.insert({a:2},done)
+    sound('violin',done)
   })
-  .wait(function(data,done){
-    collection.count(done)
+  .step(function(data){
+    console.log('sound:'+data.sound)
+    return data;
   })
-  .step(function(count){
-    console.log(format("count = %s", count));
-    return true;
-  })
-  .wait(function(data,done){
-    collection.find().toArray(done)
-  })
-  .end(function(err,docs){
-    if( err ) return console.log(err);
-    console.dir(docs)
-    db.close()
+  .endif()
+
+  .end(function(err,result){
+    if( err ) return console.log(err)
+    console.log(result)
   })
 ```
 
 
-And the original, callback hell:
+Versus callback hell:
 
 ```js
-  var MongoClient = require('mongodb').MongoClient
-  , format = require('util').format;
+color('red', function(err,data){
+  if( err ) return console.log(err)
 
-  MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
-    if(err) throw err;
+  console.log('color:'+data.color)
+  var state = {sound:true}
 
-    var collection = db.collection('test_insert');
-    collection.insert({a:2}, function(err, docs) {
+  if( state.sound ) {
+    sound('violin',function(err,data){
+      if( err ) return console.log(err)
+      console.log('sound:'+data.sound)
+      printresults(data)
+    })
+  }
+  else printresults()
 
-      collection.count(function(err, count) {
-        console.log(format("count = %s", count));
-      });
-
-      collection.find().toArray(function(err, results) {
-        console.dir(results);
-        db.close();
-      });
-    });
-  })
+  function printresults(results) {
+    console.log(results)
+  }
+})
 ```
 
 
