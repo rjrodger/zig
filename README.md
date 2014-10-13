@@ -48,27 +48,46 @@ Nice and linear down the page.
 ```js
 var zig = require('..')
 
+var result = {}
+
 zig()
   .start()
+
   .wait(function(data,done){
     color('red',done)
   })
   .step(function(data){
     console.log('color:'+data.color)
-    return {sound:true};
+    return result.color = data.color
   })
 
-  .if( 'data.sound' )
+  .wait(function(data,done){
+    quality('high',done)
+  })
+  .step(function(data){
+    console.log('quality:'+data.quality)
+    return result.quality = data.quality
+  })
+
+  .if( Math.random() < 0.5 )
   .wait(function(data,done){
     sound('violin',done)
   })
   .step(function(data){
     console.log('sound:'+data.sound)
-    return data;
+    return result.sound = data.sound
   })
   .endif()
 
-  .end(function(err,result){
+  .wait(function(data,done){
+    texture('rough',done)
+  })
+  .step(function(data){
+    console.log('texture:'+data.texture)
+    return result.texture = data.texture
+  })
+
+  .end(function(err){
     if( err ) return console.log(err)
     console.log(result)
   })
@@ -78,24 +97,42 @@ zig()
 Versus callback hell:
 
 ```js
+var result = {}
+
 color('red', function(err,data){
   if( err ) return console.log(err)
 
+  result.color = data.color
   console.log('color:'+data.color)
-  var state = {sound:true}
 
-  if( state.sound ) {
-    sound('violin',function(err,data){
-      if( err ) return console.log(err)
-      console.log('sound:'+data.sound)
-      printresults(data)
-    })
-  }
-  else printresults()
+  quality('high', function(err,data){
+    if( err ) return console.log(err)
 
-  function printresults(results) {
-    console.log(results)
-  }
+    result.quality = data.quality
+    console.log('quality:'+data.quality)
+
+    if( Math.random() < 0.5 ) {
+      sound('violin',function(err,data){
+        if( err ) return console.log(err)
+
+        result.sound = data.sound
+        console.log('sound:'+data.sound)
+        do_texture()
+      })
+    }
+    else do_texture()
+
+    function do_texture() {
+      texture('rough', function(err,data){
+        if( err ) return console.log(err)
+
+        result.texture = data.texture
+        console.log('texture:'+data.texture)
+
+        console.log(result)
+      })
+    }
+  })
 })
 ```
 
