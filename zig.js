@@ -7,6 +7,13 @@ function Zig( options ) {
   var self = this
   options = options || {}
 
+  var trace = options.trace || function(){}
+  trace = (_.isBoolean(trace) && trace) ? function(){
+    var args = Array.prototype.slice.apply(arguments)
+    args.unshift('zig')
+    console.log.apply(null,args)
+  } : trace
+
   var errhandler = console.log
   var complete   = console.log
   var ifdepth    = 0
@@ -37,8 +44,7 @@ function Zig( options ) {
       if( dead ) return;
 
       step = steps.shift()
-      //console.log(step,data,ifdepth)
-
+      trace(step,data)
 
       if( !step ) {
         if( 0 < ifdepth ) throw new Error(ifdepth+' missing endifs.')
@@ -46,7 +52,7 @@ function Zig( options ) {
       }
 
       if( 'step' == step.type && active ) {
-        //console.log('step')
+        trace('step')
         data = step.fn(data)
         setImmediate(nextstep)
       } 
