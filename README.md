@@ -43,8 +43,7 @@ function sound(val,callback) {
 ```
 
 
-Look ma, no callbacks! Nice and
-linear down the page.
+Nice and linear down the page.
 
 ```js
 var zig = require('..')
@@ -58,6 +57,7 @@ zig()
     console.log('color:'+data.color)
     return {sound:true};
   })
+
   .if( 'data.sound' )
   .wait(function(data,done){
     sound('violin',done)
