@@ -4,8 +4,9 @@ Zig - Simple, but naughty, control flow for Node.js
 > Why have an if statement when you can have an if function?
 
 A special case solution for callback hell that focuses on developer
-ease-of-use. Executes your functions in series or parallel, tracks errors and
-results, and provides conditionals.
+ease-of-use. Executes your functions in series or parallel, tracks
+errors and results, and provides conditionals. And move blocks of code
+around to change the order of execution.
 
 
 [![Build Status](https://travis-ci.org/rjrodger/zig.png?branch=master)](https://travis-ci.org/rjrodger/zig)
