@@ -1,5 +1,8 @@
 //"use strict";
 
+
+var util = require('util')
+
 var _ = require('underscore')
 
 
@@ -11,7 +14,10 @@ function Zig( options ) {
   trace = (_.isBoolean(trace) && trace) ? function(){
     var args = Array.prototype.slice.apply(arguments)
     args.unshift('zig')
-    console.log.apply(null,args)
+    args = _.map(args,function(a){
+      return _.isObject(a) ? util.inspect(a) : a
+    })
+    console.log(args.join('\t'))
   } : trace
 
   var errhandler = console.log
@@ -25,11 +31,8 @@ function Zig( options ) {
     var ifdepth = 0, active = true
     var collect = 0, collector = []
 
-    //console.log(options)
-
     if( options.timeout ) {
       setTimeout(function(){
-        //console.log('TO')
         dead = true
 
         // TODO: use eraro
@@ -44,57 +47,57 @@ function Zig( options ) {
       if( dead ) return;
 
       step = steps.shift()
-      trace(step,data)
 
-      if( !step ) {
-        if( 0 < ifdepth ) throw new Error(ifdepth+' missing endifs.')
-        return complete(null,data);
-      }
+      if( !step ) return exit();
+
+      step.fn = step.fn || {nm:'---anon---'}
+      step.fn.nm = step.fn.nm || step.fn.name
 
       if( 'step' == step.type && active ) {
-        trace('step')
         data = step.fn(data)
-        setImmediate(nextstep)
+        trace(step.type,step.fn.nm,data)
+        if( null == data ) return exit();
+        nextstep()
       } 
       else if( 'run' == step.type && active ) {
-        //console.log('run')
         collect++
         step.fn(data,function(err,out){
           if( err ) return errhandler(err);
           collector.push(out)
           check_collect()
         })
-        setImmediate(nextstep)
+        trace(step.type,step.fn.nm,data)
+        nextstep()
       }
       else if( 'wait' == step.type && active ) {
-        //console.log('wait')
-        
+        trace(step.type,step.fn.nm,data)
         if( 0 == collect ) return wait_fn();
         check_collect()
       }
       else if( 'if' == step.type ) {
-        //console.log('if')
-        if( 0 == ifdepth ) {
+        if( active ) {
           active = evalif(data,step.cond)
           ifdepth++;
         }
         else ifdepth++;
-        setImmediate(nextstep)
+
+        trace(step.type,step.fn.nm,active,ifdepth)
+        nextstep()
       }
       else if( 'endif' == step.type ) {
-        //console.log('endif')
         ifdepth--;
         ifdepth = ifdepth < 0 ? 0 : ifdepth;
         active = 0 == ifdepth;
-        setImmediate(nextstep)
+
+        trace(step.type,step.fn.nm,active,ifdepth+1)
+        nextstep()
       }
-      else setImmediate(nextstep)
+      else nextstep()
 
 
       function check_collect() {
         if( dead ) return;
-
-        if( collector.length == collect ) {
+        if( collector.length >= collect ) {
           data = _.clone(collector)
           collect = 0
           collector = []
@@ -110,6 +113,10 @@ function Zig( options ) {
         })
       }
 
+      function exit() {
+        if( 0 < ifdepth ) throw new Error(ifdepth+' missing endifs.')
+        return complete(null,data);
+      }
     }
     nextstep()
   }
@@ -128,18 +135,16 @@ function Zig( options ) {
       bool = !!eval(cond)
     }
 
-    //console.log('evalif',bool,cond)
     return bool
   }
 
 
   self.start = function( cb ) {
-    errhandler = cb
+    errhandler = cb || errhandler
     return self;
   }
 
   self.end = function( cb ) {
-    // TODO: catch unmatched if-endif
     complete = cb || errhandler
     errhandler = complete
     execute()

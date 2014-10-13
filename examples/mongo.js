@@ -1,8 +1,8 @@
 
 
 //callbacky()
-//ziggy()
-asyncy()
+ziggy()
+//asyncy()
 
 function callbacks() {
 
@@ -89,7 +89,7 @@ function ziggy() {
     })
     .step(function(data){
       db = data
-      collection = db.collection('test_insert')
+      return collection = db.collection('test_insert')
     })
     .wait(function(data,done){
       collection.insert({a:2},done)
@@ -99,6 +99,7 @@ function ziggy() {
     })
     .step(function(count){
       console.log(format("count = %s", count));
+      return true;
     })
     .wait(function(data,done){
       collection.find().toArray(done)

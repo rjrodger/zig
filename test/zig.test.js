@@ -153,4 +153,19 @@ describe('zig',function(){
   })
 
 
+  it('exit', function(fin){
+    var tmp = {}
+    zig()
+      .start()
+      .step(function(){ tmp.a = 1; return true})
+      .step(function(){ tmp.b = 2; return false})
+      .step(function(){ tmp.c = 3; return null})
+      .step(function(){ tmp.d = 4; return true})
+      .end(function(e,o){
+        assert.equal(null,o)
+        assert.deepEqual({a:1,b:2,c:3},tmp)
+        fin(e)
+      })
+  })
+
 })
