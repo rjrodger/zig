@@ -80,7 +80,6 @@ function ziggy() {
   var MongoClient = require('mongodb').MongoClient
   var format = require('util').format;
 
-
   var db,collection
 
   zig({trace:false})
