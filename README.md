@@ -13,7 +13,7 @@ results, and provides conditionals.
 [![NPM](https://nodei.co/npm/zig.png)](https://nodei.co/npm/zig/)
 [![NPM](https://nodei.co/npm-dl/zig.png)](https://nodei.co/npm-dl/zig/)
 
-If you're using this plugin module, feel free to contact me on twitter if you
+If you're using this module, feel free to contact me on twitter if you
 have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
 Current Version: 0.0.2
@@ -37,8 +37,16 @@ function color(val,callback) {
   callback(null,{color:val})
 }
 
+function quality(val,callback) {
+  callback(null,{quality:val})
+}
+
 function sound(val,callback) {
   callback(null,{sound:val})
+}
+
+function texture(val,callback) {
+  callback(null,{texture:val})
 }
 ```
 
