@@ -5,24 +5,30 @@ Zig - Simple, but naughty, control flow for Node.js
 
 A special case solution for callback hell that focuses on developer
 ease-of-use. Executes your functions in series or parallel, tracks
-errors and results, and provides conditionals. And move blocks of code
-around to change the order of execution.
+errors and results, **and provides conditionals**.
 
+Allows you to move blocks of code around to change the order of
+execution.
+
+
+Current Version: 0.1.0
+
+Tested on: Node 0.10.35
 
 [![Build Status](https://travis-ci.org/rjrodger/zig.png?branch=master)](https://travis-ci.org/rjrodger/zig)
 
-[![NPM](https://nodei.co/npm/zig.png)](https://nodei.co/npm/zig/)
-[![NPM](https://nodei.co/npm-dl/zig.png)](https://nodei.co/npm-dl/zig/)
+[Annotated Source](http://rjrodger.github.io/zig/doc/zig.html)
+
+
+# Support
 
 If you're using this module, feel free to contact me on twitter if you
 have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
-Current Version: 0.0.2
-
-Tested on: Node 0.10.31
+[![Gitter chat](https://badges.gitter.im/rjrodger/zig.png)](https://gitter.im/rjrodger/zig)
 
 
-### Install
+# Install
 
 ```sh
 npm install zig
@@ -155,6 +161,7 @@ npm test
 
 ## Releases
 
+   * 0.1.0: normalize test, build, and readme
    * 0.0.2: steps can exit
    * 0.0.1: first working version
 

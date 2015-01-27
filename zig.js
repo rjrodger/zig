@@ -1,9 +1,11 @@
-//"use strict";
+/* Copyright (c) 2014-2015 Richard Rodger, MIT License */
+"use strict";
+/* jshint node:true, asi:true, eqnull:true */
 
 
 var util = require('util')
 
-var _ = require('underscore')
+var _ = require('lodash')
 
 
 function Zig( options ) {
@@ -71,7 +73,7 @@ function Zig( options ) {
       }
       else if( 'wait' == step.type && active ) {
         trace(step.type,step.fn.nm,data)
-        if( 0 == collect ) return wait_fn();
+        if( 0 === collect ) return wait_fn();
         check_collect()
       }
       else if( 'if' == step.type ) {
@@ -87,7 +89,7 @@ function Zig( options ) {
       else if( 'endif' == step.type ) {
         ifdepth--;
         ifdepth = ifdepth < 0 ? 0 : ifdepth;
-        active = 0 == ifdepth;
+        active = 0 === ifdepth;
 
         trace(step.type,step.fn.nm,active,ifdepth+1)
         nextstep()
@@ -132,6 +134,7 @@ function Zig( options ) {
       bool = cond
     }
     else if( _.isString(cond) ) {
+      /* jshint evil:true */
       bool = !!eval(cond)
     }
 
