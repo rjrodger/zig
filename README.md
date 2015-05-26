@@ -11,9 +11,9 @@ Allows you to move blocks of code around to change the order of
 execution.
 
 
-Current Version: 0.1.0
+Current Version: 0.1.1
 
-Tested on: Node 0.10.35
+Tested on: Node 0.10.38
 
 [![Build Status](https://travis-ci.org/rjrodger/zig.png?branch=master)](https://travis-ci.org/rjrodger/zig)
 
