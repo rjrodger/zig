@@ -155,7 +155,7 @@ describe('zig',function(){
 
   it('exit', function(fin){
     var tmp = {}
-    zig()
+    zig({timeout:22222})
       .start()
       .step(function(){ tmp.a = 1; return true})
       .step(function(){ tmp.b = 2; return false})

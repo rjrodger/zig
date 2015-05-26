@@ -32,9 +32,10 @@ function Zig( options ) {
     var step,data,dead=false
     var ifdepth = 0, active = true
     var collect = 0, collector = []
+    var to
 
     if( options.timeout ) {
-      setTimeout(function(){
+      to = setTimeout(function(){
         dead = true
 
         // TODO: use eraro
@@ -117,6 +118,7 @@ function Zig( options ) {
 
       function exit() {
         if( 0 < ifdepth ) throw new Error(ifdepth+' missing endifs.')
+        clearTimeout(to)
         return complete(null,data);
       }
     }
