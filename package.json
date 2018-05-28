@@ -1,11 +1,10 @@
 {
   "name": "zig",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Simple, but naughty, control flow for Node.js.",
   "main": "zig.js",
   "scripts": {
-    "test": "./test.sh",
-    "build": "./build.sh"
+    "test": "mocha test/zig.test.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +21,12 @@
   "author": "Richard Rodger (http://richardrodger.com/)",
   "license": "MIT",
   "dependencies": {
-    "lodash": "4"
-  }
+    "lodash": "4",
+    "mocha": "^5.2.0"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "zig.js"
+  ]
 }
