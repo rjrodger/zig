@@ -31,7 +31,7 @@ function Zig( options ) {
   function execute() {
     var step,data,dead=false
     var ifdepth = 0, active = true
-    var collect = 0, collector = []
+    var collect = 0, collected = 0, collector = []
     var to
 
     if( options.timeout ) {
@@ -61,12 +61,15 @@ function Zig( options ) {
         trace(step.type,step.fn.nm,data)
         if( null == data ) return exit();
         nextstep()
-      } 
+      }
       else if( 'run' == step.type && active ) {
+        var pos = collect
         collect++
+        collector.push(null)
         step.fn(data,function(err,out){
           if( err ) return errhandler(err);
-          collector.push(out)
+          collected++
+          collector[pos] = out
           check_collect()
         })
         trace(step.type,step.fn.nm,data)
@@ -100,9 +103,10 @@ function Zig( options ) {
 
       function check_collect() {
         if( dead ) return;
-        if( collector.length >= collect ) {
+        if( collected >= collect ) {
           data = _.clone(collector)
           collect = 0
+          collected = 0
           collector = []
           wait_fn()
         }
@@ -125,7 +129,7 @@ function Zig( options ) {
     nextstep()
   }
 
-  
+
   function evalif(data,cond) {
     var bool = false
 
@@ -154,7 +158,7 @@ function Zig( options ) {
     errhandler = complete
     execute()
   }
-  
+
   self.wait = function( fn ) {
     steps.push({
       type:'wait',

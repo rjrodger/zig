@@ -113,7 +113,7 @@ describe('zig',function(){
       .run(function(data,done){
         setTimeout(function(){
           done(null,1)
-        },10)
+        },12)
       })
       .run(function(data,done){
         setTimeout(function(){
